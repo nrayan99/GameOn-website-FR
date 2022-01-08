@@ -33,7 +33,6 @@ modalClose.addEventListener("click",exitModal) // Add a click event listener on 
 function launchModal() {
   modalbg.style.display = "block";
 }
-
 function exitModal() {
   modalbg.style.display = "none"; // Change the modalbg style on none
 }
@@ -41,29 +40,47 @@ function validate() {
 
   if (firstName.value.length<2)
   {
-    return false
+    formData[0].setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
+    formData[0].setAttribute("data-error-visible",true)
   }
+  else formData[0].setAttribute("data-error-visible",false)
   if (lastName.value.length<2)
   {
-    return false
+    formData[1].setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du nom.")
+    formData[1].setAttribute("data-error-visible",true)
   }
+  else formData[1].setAttribute("data-error-visible",false)
   if (!emailValidation(email.value))
   {
-    return false
+    formData[2].setAttribute("data-error","Veuillez entrer une adresse mail correcte")
+    formData[2].setAttribute("data-error-visible",true)
   }
+  else formData[2].setAttribute("data-error-visible",false)
+  if (!birthDate.value)
+  {
+    formData[3].setAttribute("data-error","Vous devez entrer votre date de naissance.")
+    formData[3].setAttribute("data-error-visible",true)
+  }
+  else formData[3].setAttribute("data-error-visible",false)
   if (!numberOnly(tournamentQuantity.value))
   {
-    return false
+    formData[4].setAttribute("data-error","Veuillez entrer uniquement des chiffres")
+    formData[4].setAttribute("data-error-visible",true)
   }
+  else formData[4].setAttribute("data-error-visible",false)
   if(!location1.checked&&!location2.checked&&!location3.checked&&!location4.checked&&!location5.checked&&!location6.checked)
   {
-    return false
+    formData[5].setAttribute("data-error","Vous devez choisir une option.")
+    formData[5].setAttribute("data-error-visible",true)
   }
+  else formData[5].setAttribute("data-error-visible",false)
   if (!checkbox1.checked)
   {
-    return false
+    formData[6].setAttribute("data-error","Vous devez vérifier que vous acceptez les termes et conditions")
+    formData[6].setAttribute("data-error-visible",true)
   }
-  return true
+  else formData[6].setAttribute("data-error-visible",false)
+  return false
 }
 //regex validation for email
 function emailValidation(value){
