@@ -182,6 +182,11 @@ main {
   color: #fff;
   padding-top: 10px;
 }
+.content.success
+{
+  color: forestgreen;
+  text-align: center;
+}
 
 .modal-body {
   padding: 15px 8%;
