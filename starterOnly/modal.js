@@ -24,7 +24,8 @@ const location3 = document.getElementById("location3");
 const location4 = document.getElementById("location4");
 const location5 = document.getElementById("location5");
 const location6 = document.getElementById("location6");
-const checkbox1 = document.getElementById("checkbox1")
+const checkbox1 = document.getElementById("checkbox1");
+const validationMessage = document.querySelectorAll(".bground")[1]
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // Close modal event
@@ -36,50 +37,89 @@ function launchModal() {
 function exitModal() {
   modalbg.style.display = "none"; // Change the modalbg style on none
 }
+//show success validation message
+function showValidation() {
+  validationMessage.style.display="block"
+}
+//hide success validation message
+function exitValidation() {
+  validationMessage.style.display="none"
+}
+function resetForm() { // reset form field
+  formData.forEach(field=>{
+    if (field.getElementsByTagName("input")[0].type==="radio") // if type is radio reset to not checked
+    {
+      [...field.getElementsByTagName("input")].forEach(radio=>{radio.checked=false})
+    }
+    else if (field.getElementsByTagName("input")[0].type==="checkbox") // if type is checkbox reset the notifications to not checked
+    {
+      field.getElementsByTagName("input")[1].checked=false
+    }
+    else // Reset other inputs value to null
+    {
+      field.getElementsByTagName("input")[0].value=null
+    }
+  })
+}
 function validate() {
-
+  //If conditions are not respected , set an attribute data-error with the appropriate error and set data-error-visible on true
+  var status = true
   if (firstName.value.length<2)
   {
     formData[0].setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
     formData[0].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[0].setAttribute("data-error-visible",false)
   if (lastName.value.length<2)
   {
     formData[1].setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du nom.")
     formData[1].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[1].setAttribute("data-error-visible",false)
   if (!emailValidation(email.value))
   {
     formData[2].setAttribute("data-error","Veuillez entrer une adresse mail correcte")
     formData[2].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[2].setAttribute("data-error-visible",false)
   if (!birthDate.value)
   {
     formData[3].setAttribute("data-error","Vous devez entrer votre date de naissance.")
     formData[3].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[3].setAttribute("data-error-visible",false)
   if (!numberOnly(tournamentQuantity.value))
   {
     formData[4].setAttribute("data-error","Veuillez entrer uniquement des chiffres")
     formData[4].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[4].setAttribute("data-error-visible",false)
   if(!location1.checked&&!location2.checked&&!location3.checked&&!location4.checked&&!location5.checked&&!location6.checked)
   {
     formData[5].setAttribute("data-error","Vous devez choisir une option.")
     formData[5].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[5].setAttribute("data-error-visible",false)
   if (!checkbox1.checked)
   {
     formData[6].setAttribute("data-error","Vous devez vérifier que vous acceptez les termes et conditions")
     formData[6].setAttribute("data-error-visible",true)
+    status=false
   }
   else formData[6].setAttribute("data-error-visible",false)
+  if (status)
+  {
+    exitModal()
+    showValidation()
+    setTimeout(exitValidation,3000)
+    resetForm()
+  }
   return false
 }
 //regex validation for email
