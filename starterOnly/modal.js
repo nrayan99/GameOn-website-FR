@@ -62,57 +62,51 @@ function resetForm() { // reset form field
   })
 }
 function validate() {
-  //If conditions are not respected , set an attribute data-error with the appropriate error and set data-error-visible on true
+  //If conditions are not respected show error
   var status = true
-  if (firstName.value.length<2)
+  const locations = [location1,location2,location3,location4,location5,location6];
+  if (!(firstName.value.length>=2)) // firstname must have a minimum length of 2
   {
-    formData[0].setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
-    formData[0].setAttribute("data-error-visible",true)
+    showError(0,"Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
     status=false
   }
-  else formData[0].setAttribute("data-error-visible",false)
-  if (lastName.value.length<2)
+  else hideError(0)
+  if (!(lastName.value.length>=2)) // lastName must have a minimum length of 2
   {
-    formData[1].setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du nom.")
-    formData[1].setAttribute("data-error-visible",true)
+    showError(1,"Veuillez entrer 2 caractères ou plus pour le champ du nom.")
     status=false
   }
-  else formData[1].setAttribute("data-error-visible",false)
-  if (!emailValidation(email.value))
+  else hideError(1)
+  if (!emailValidation(email.value)) // email must be valid
   {
-    formData[2].setAttribute("data-error","Veuillez entrer une adresse mail correcte")
-    formData[2].setAttribute("data-error-visible",true)
+    showError(2,"Veuillez entrer une adresse mail correcte")
     status=false
   }
-  else formData[2].setAttribute("data-error-visible",false)
-  if (!birthDate.value)
+  else hideError(2)
+  if (!dateValidation(birthDate.value)) // birth date must be valid
   {
-    formData[3].setAttribute("data-error","Vous devez entrer votre date de naissance.")
-    formData[3].setAttribute("data-error-visible",true)
+    showError(3,"Vous devez entrer une date de naissance valide")
     status=false
   }
-  else formData[3].setAttribute("data-error-visible",false)
-  if (!numberOnly(tournamentQuantity.value))
+  else hideError(3)
+  if (!numberOnly(tournamentQuantity.value)) // tournamentquantity must be only number
   {
-    formData[4].setAttribute("data-error","Veuillez entrer uniquement des chiffres")
-    formData[4].setAttribute("data-error-visible",true)
+    showError(4,"Veuillez entrer uniquement des chiffres")
     status=false
   }
-  else formData[4].setAttribute("data-error-visible",false)
-  if(!location1.checked&&!location2.checked&&!location3.checked&&!location4.checked&&!location5.checked&&!location6.checked)
+  else hideError(4)
+  if(locations.every((e)=>!e.checked)) // we have to check an option
   {
-    formData[5].setAttribute("data-error","Vous devez choisir une option.")
-    formData[5].setAttribute("data-error-visible",true)
+    showError(5,"Vous devez choisir une option.")
     status=false
   }
-  else formData[5].setAttribute("data-error-visible",false)
-  if (!checkbox1.checked)
+  else hideError(5)
+  if (!checkbox1.checked) // we must agree with terms and conditions
   {
-    formData[6].setAttribute("data-error","Vous devez vérifier que vous acceptez les termes et conditions")
-    formData[6].setAttribute("data-error-visible",true)
+    showError(6,"Vous devez vérifier que vous acceptez les termes et conditions")
     status=false
   }
-  else formData[6].setAttribute("data-error-visible",false)
+  else hideError(6)
   if (status)
   {
     exitModal()
@@ -132,4 +126,34 @@ function numberOnly(value)
 {
   const regex = /^-?\d+$/
   return regex.test(value)
+}
+function dateValidation(date) // validate the birthdate
+{
+  if (!date) return false // if date is empty return false
+  const actualDate = new Date() // get actual date
+  // if we are in the same year and same month but the day is in the future return false
+  if (date.substr(0,4)==actualDate.getFullYear()&&date.substr(5,2)==actualDate.getMonth()+1&&date.substr(8,2)>actualDate.getDate())
+  {
+    return false
+  }
+  // if the year is in the future return false
+  else if (date.substr(0,4)>actualDate.getFullYear())
+  {
+    return false
+  }
+  // if we are in the same year but the month is in the future return false
+  else if (date.substr(0,4)==actualDate.getFullYear()&&date.substr(5,2)>actualDate.getMonth()+1)
+  {
+    return false
+  }
+  else return true
+}
+function showError(i,error) // Set html attribute to show error
+{
+  formData[i].setAttribute("data-error",error)
+  formData[i].setAttribute("data-error-visible",true)
+}
+function hideError(i) // Set html attribute to hide error
+{
+  formData[i].setAttribute("data-error-visible",false)
 }
